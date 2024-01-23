@@ -1,9 +1,9 @@
 package DavidRios.entities;
 
 import DavidRios.entities.utilities.TipoEvento;
-import jakarta.persistence.*;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Eventi")
@@ -12,13 +12,13 @@ public class Evento {
     @GeneratedValue
     private long id;
     private String titolo;
-    private Date dataEvento;
+    private LocalDate dataEvento;
     private String descrizione;
     @Enumerated(EnumType.STRING)
     private TipoEvento tipoEvento;
     private int numeroMassimoPartecipanti;
 
-    public Evento (String titolo, Date dataEvento, String descrizione, TipoEvento tipoEvento, int numeroMassimoPartecipanti) {
+    public Evento (String titolo, LocalDate dataEvento, String descrizione, TipoEvento tipoEvento, int numeroMassimoPartecipanti) {
         this.titolo = titolo;
         this.dataEvento = dataEvento;
         this.descrizione = descrizione;
@@ -28,12 +28,24 @@ public class Evento {
 
     public Evento(){}
 
+    @Override
+    public String toString() {
+        return "Evento{" +
+                "id=" + id +
+                ", titolo='" + titolo + '\'' +
+                ", dataEvento=" + dataEvento +
+                ", descrizione='" + descrizione + '\'' +
+                ", tipoEvento=" + tipoEvento +
+                ", numeroMassimoPartecipanti=" + numeroMassimoPartecipanti +
+                '}';
+    }
+
     // GETTERS
     public String getTitolo() {
         return titolo;
     }
 
-    public Date getDataEvento() {
+    public LocalDate getDataEvento() {
         return dataEvento;
     }
 
@@ -56,7 +68,7 @@ public class Evento {
         this.titolo = titolo;
     }
 
-    public void setDataEvento(Date dataEvento) {
+    public void setDataEvento(LocalDate dataEvento) {
         this.dataEvento = dataEvento;
     }
 
