@@ -1,7 +1,15 @@
 package DavidRios;
 
 import DavidRios.entities.Evento;
-import DavidRios.entities.GestioneEventiDAO;
+import DavidRios.entities.Location;
+import DavidRios.entities.Partecipazione;
+import DavidRios.entities.Persona;
+import DavidRios.entities.entities_dao.GestioneEventiDAO;
+import DavidRios.entities.entities_dao.LocationDAO;
+import DavidRios.entities.entities_dao.PartecipazioneDAO;
+import DavidRios.entities.entities_dao.PersonaDAO;
+import DavidRios.entities.utilities.Sesso;
+import DavidRios.entities.utilities.Stato;
 import DavidRios.entities.utilities.TipoEvento;
 
 import javax.persistence.EntityManager;
@@ -14,16 +22,21 @@ public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestioneeventi");
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
-
-        Evento nuovoEvento = new Evento("Regular Event", LocalDate.of(2024, 5, 10),"The event regular people.", TipoEvento.PUBBLICO, 250);
-
         GestioneEventiDAO gedao = new GestioneEventiDAO(em);
+        LocationDAO ldao = new LocationDAO(em);
+        PartecipazioneDAO padao = new PartecipazioneDAO(em);
+        PersonaDAO pedao = new PersonaDAO(em);
 
-        //gedao.saveEvent(nuovoEvento);
+        Location teatroDellOpera = new Location("Teatro Dell'Opera", "Roma");
+        ldao.saveLocation(teatroDellOpera);
+        Evento exclusiveNight = new Evento("Exclusive Night at Opera Theater", LocalDate.now(), teatroDellOpera, "Classy event for classy people.", TipoEvento.PRIVATO, 100);
+        gedao.saveEvent(exclusiveNight);
+        Persona davidRios = new Persona("David", "Rios", "david@rios.com", LocalDate.of(1997,1,13), Sesso.M);
+        pedao.savePersona(davidRios);
+        Partecipazione exNiDaRi = new Partecipazione(davidRios, exclusiveNight, Stato.CONFERMATA);
+        padao.savePartecipazione(exNiDaRi);
 
-        Evento found = gedao.findById(3);
-        System.out.println(found);
-
-        gedao.findAndDelete(4);
+        em.close();
+        emf.close();
     }
 }

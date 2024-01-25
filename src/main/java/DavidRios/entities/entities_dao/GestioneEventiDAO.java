@@ -1,4 +1,6 @@
-package DavidRios.entities;
+package DavidRios.entities.entities_dao;
+
+import DavidRios.entities.Evento;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -17,6 +19,7 @@ public class GestioneEventiDAO {
             transaction.begin();
             em.persist(ev);
             transaction.commit();
+            System.out.println("Evento salvato con successo!");
         } catch (TransactionalException terr) {
             System.err.println(terr.getMessage());
         }
@@ -27,12 +30,19 @@ public class GestioneEventiDAO {
     }
 
     public void findAndDelete (long id) {
-try {
-    Evento found = findById(id);
-    em.remove(found);
-    System.out.println("Evento rimosso.");
-} catch (Exception notFound) {
-    System.err.println(notFound.getMessage());
-}
+        Evento found = findById(id);
+        if (found != null) {
+            EntityTransaction transaction = em.getTransaction();
+            try {
+                transaction.begin();
+                em.remove(found);
+                transaction.commit();
+                System.out.println("Evento rimosso.");
+            } catch (Exception notFound) {
+                System.err.println(notFound.getMessage());
+            }
+    } else {
+            System.out.println("Evento non trovato.");
+        }
     }
 }
